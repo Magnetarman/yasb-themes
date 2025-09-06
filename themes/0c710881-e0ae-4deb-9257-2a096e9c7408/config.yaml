@@ -3,19 +3,14 @@ watch_config: true
 debug: false
 update_check: true
 
-komorebi:
-  start_command: "komorebic start --whkd"
-  stop_command: "komorebic stop --whkd"
-  reload_command: "komorebic reload-configuration"
-
 bars:
   primary-bar:
     enabled: true
-    screens: ["*"]
+    screens: ["LG HDR 4K"]
     class_name: "yasb-bar"
     alignment:
       position: "top"
-      center: false
+      center: true
     blur_effect:
       enabled: false
       acrylic: false
@@ -28,29 +23,47 @@ bars:
       hide_on_fullscreen: true
     dimensions:
       width: "100%"
-      height: 30
+      height: 28
     padding:
-      top: 4
-      left: 4
-      bottom: -1
-      right: 4
+      top: 2
+      left: 5
+      bottom: 2
+      right: 5
     widgets:
       left:
-        - "komorebi_active_layout"
-        - "komorebi_workspaces"
-        - "systray"
         - "cpu"
         - "memory"
         - "traffic"
-      center: []
+      center:
+        - "notifications"
       right:
         - "weather"
         - "clock"
         - "volume"
+        - "bluetooth"
         - "media"
-        - "notifications"
 
 widgets:
+  bluetooth:
+    type: "yasb.bluetooth.BluetoothWidget"
+    options:
+      label: "<span>{icon}</span> {device_count}"
+      label_alt: "{device_name}"
+      label_no_device: "No devices connected"
+      label_device_separator: ", "
+      max_length: 10
+      max_length_ellipsis: "..."
+      icons:
+        bluetooth_on: "\udb80\udcaf"
+        bluetooth_off: "\udb80\udcb2"
+        bluetooth_connected: "\udb80\udcb1"
+      device_aliases:
+        - name: "T5.0"
+          alias: "\uf025"
+      callbacks:
+        on_left: "toggle_label"
+        on_right: "exec cmd.exe /c start ms-settings:bluetooth"
+
   cpu:
     type: "yasb.cpu.CpuWidget"
     options:
@@ -58,20 +71,19 @@ widgets:
       label_alt: "{info[histograms][cpu_percent]}"
       update_interval: 1000
       histogram_icons:
-        - '\u2581' # 0%
-        - '\u2581' # 10%
-        - '\u2582' # 20%
-        - '\u2583' # 30%
-        - '\u2584' # 40%
-        - '\u2585' # 50%
-        - '\u2586' # 60%
-        - '\u2587' # 70%
-        - '\u2588' # 80%+
+        - '\u2581' #0%
+        - '\u2581' #10%
+        - '\u2582' #20%
+        - '\u2583' #30%
+        - '\u2584' #40%
+        - '\u2585' #50%
+        - '\u2586' #60%
+        - '\u2587' #70%
+        - '\u2588' #80%+
       histogram_num_columns: 8
       callbacks:
         on_left: "toggle_cpu_menu"
-        on_middle: "exec cmd /c Taskmgr"
-        on_right: "toggle_label"
+        on_right: "exec cmd /c Taskmgr"
       container_padding:
         top: 0
         left: 0
@@ -116,77 +128,6 @@ widgets:
       callbacks:
         on_left: "toggle_menu"
         on_right: "do_nothing"
-      container_padding:
-        top: 0
-        left: 0
-        bottom: 0
-        right: 0
-      label_shadow:
-        enabled: true
-        color: "black"
-        radius: 5
-        offset: [0, 0]
-
-  komorebi_active_layout:
-    type: "komorebi.active_layout.ActiveLayoutWidget"
-    options:
-      hide_if_offline: true
-      label: "{icon}"
-      layouts:
-        - "bsp"
-        - "columns"
-        - "rows"
-        - "grid"
-        - "scrolling"
-        - "vertical_stack"
-        - "horizontal_stack"
-        - "ultrawide_vertical_stack"
-        - "right_main_vertical_stack"
-      layout_icons:
-        bsp: "\uebeb"
-        columns: "\uebf7"
-        rows: "\uec01"
-        grid: "\udb81\udf58"
-        scrolling: "\uebf7"
-        vertical_stack: "\uebee"
-        horizontal_stack: "\uebf0"
-        ultrawide_vertical_stack: "\uebee"
-        right_main_vertical_stack: "\uebf1"
-        monocle: "\uf06f"
-        maximized: "\uf06f"
-        floating: "\uf2d2"
-        paused: "\udb83\udf89"
-        tiling: "\udb81\ude40"
-      callbacks:
-        on_left: "toggle_layout_menu"
-        on_middle: "toggle_tiling"
-        on_right: "next_layout"
-      layout_menu:
-        blur: true
-        round_corners: false
-        alignment: "left"
-        direction: "down"
-        offset_top: true
-        show_layout_icons: true
-      container_padding:
-        top: 0
-        left: 0
-        bottom: 0
-        right: 0
-      label_shadow:
-        enabled: true
-        color: "black"
-        radius: 5
-        offset: [0, 0]
-
-  komorebi_workspaces:
-    type: "komorebi.workspaces.WorkspaceWidget"
-    options:
-      label_offline: "<span>\ueb96</span>"
-      label_default_name: ""
-      label_zero_index: false
-      hide_empty_workspaces: true
-      hide_if_offline: true
       container_padding:
         top: 0
         left: 0
@@ -282,20 +223,20 @@ widgets:
         max_artist_size: 20
         show_source: true
     icons:
-        play: "\ue768"
-        pause: "\ue769"
-        prev_track: "\ue892"
-        next_track: "\ue893"
+      play: "\ue768"
+      pause: "\ue769"
+      prev_track: "\ue892"
+      next_track: "\ue893"
     container_padding:
       top: 0
       left: 0
       bottom: 0
       right: 0
     label_shadow:
-       enabled: true
-       color: "black"
-       radius: 5
-       offset: [0, 0]
+      enabled: true
+      color: "black"
+      radius: 5
+      offset: [0, 0]
 
   systray:
     type: "yasb.systray.SystrayWidget"
@@ -324,12 +265,12 @@ widgets:
     options:
       label: "<span>{icon}</span> {temp}"
       label_alt: "Low: {min_temp} | High: {max_temp} | Humidity: {humidity}"
-      api_key: "f5bc02da05ce44f0b29231930251207" # Get your free API key from https://www.weatherapi.com/
+      api_key: "" #Get your free API key from https://www.weatherapi.com/
       show_alerts: true
       update_interval: 600
       hide_decimal: true
       units: "metric"
-      location: "Cairo, Egypt"
+      location: "" #Change to your desired location
       callbacks:
         on_left: "toggle_card"
         on_middle: "do_nothing"
@@ -373,7 +314,7 @@ widgets:
   clock:
     type: "yasb.clock.ClockWidget"
     options:
-      label: "{%I:%M %p}"
+      label: "{%I:%M}"
       label_alt: "{%A, %d %B %Y}"
       update_interval: 1000
       calendar:
@@ -401,11 +342,11 @@ widgets:
     options:
       label: "<span>{icon}</span>{level}"
       volume_icons:
-        - "\ue74f" # Icon for muted
-        - "\ue992" # Icon for 0-10% volume
-        - "\ue993" # Icon for 11-30% volume
-        - "\ue994" # Icon for 31-60% volume
-        - "\ue995" # Icon for 61-100% volume
+        - "\ue74f" #Icon for muted
+        - "\ue992" #Icon for 0-10% volume
+        - "\ue993" #Icon for 11-30% volume
+        - "\ue994" #Icon for 31-60% volume
+        - "\ue995" #Icon for 61-100% volume
       audio_menu:
         blur: true
         round_corners: false
